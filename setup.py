@@ -13,7 +13,7 @@ except ImportError:
 
 def main():
     setup(name='traceb',
-          version='0.1.0',
+          version='0.1.1',
           description='traceback with verbose and compact options',
           long_description=long_desc,
           author='Tiago Coutinho',

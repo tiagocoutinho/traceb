@@ -12,6 +12,8 @@ __all__ = ['extract_stack', 'extract_tb', 'format_exception',
            'format_tb', 'print_exc', 'format_exc', 'print_exception',
            'print_last', 'print_stack', 'print_tb', 'tb_modeno']
 
+__version__ = '0.1.1'
+
 def _print(file, str='', terminator='\n'):
     file.write(str+terminator)
 
