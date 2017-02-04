@@ -15,12 +15,12 @@ __all__ = ['extract_stack', 'extract_tb', 'format_exception',
 def _print(file, str='', terminator='\n'):
     file.write(str+terminator)
 
-def print_list(extracted_list, file=None, tb_mode='compact', show_args=False):
+def print_list(extracted_list, file=None, tb_mode='compact'):
     """Print the list of tuples as returned by extract_tb() or
     extract_stack() as a formatted stack trace to the given file."""
     if file is None:
         file = sys.stderr
-    lst = format_list(extracted_list, tb_mode, show_args)
+    lst = format_list(extracted_list, tb_mode)
     _print(file, "".join(lst))
 
 _MaxParamLength = 25
@@ -312,7 +312,7 @@ def print_stack(f=None, limit=None, file=None, tb_mode='compact', show_args=Fals
             raise ZeroDivisionError
         except ZeroDivisionError:
             f = sys.exc_info()[2].tb_frame.f_back
-    print_list(extract_stack(f, limit), file, tb_mode, show_args)
+    print_list(extract_stack(f, limit, show_args), file, tb_mode)
 
 def format_stack(f=None, limit=None, tb_mode='compact', show_args=False):
     """Shorthand for 'format_list(extract_stack(f, limit))'."""
@@ -321,9 +321,9 @@ def format_stack(f=None, limit=None, tb_mode='compact', show_args=False):
             raise ZeroDivisionError
         except ZeroDivisionError:
             f = sys.exc_info()[2].tb_frame.f_back
-    return format_list(extract_stack(f, limit), tb_mode, show_args)
+    return format_list(extract_stack(f, limit, show_args), tb_mode)
 
-def extract_stack(f=None, limit = None):
+def extract_stack(f=None, limit = None, show_args=False):
     """Extract the raw traceback from the current stack frame.
 
     The return value has the same format as for extract_tb().  The
@@ -347,6 +347,8 @@ def extract_stack(f=None, limit = None):
         co = f.f_code
         filename = co.co_filename
         name = co.co_name
+        if show_args:
+            name += _format_args(f)
         linecache.checkcache(filename)
         line = linecache.getline(filename, lineno, f.f_globals)
         if line: line = line.strip()
